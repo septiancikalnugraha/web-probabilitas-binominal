@@ -1,0 +1,5 @@
+{
+    "n": 50,  // Total transaksi per hari
+    "p": 0.7, // Peluang sukses menjual pulsa atau kuota (70%)
+    "k": 30   // Target jumlah transaksi sukses
+}
