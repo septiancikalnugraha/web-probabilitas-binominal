@@ -1,1 +1,0 @@
-# web-probabilitas-binominal
