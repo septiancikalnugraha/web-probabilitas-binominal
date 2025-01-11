@@ -54,9 +54,6 @@ def calculate():
         pmf_result = binomial_pmf(n, p, k)
         cdf_result = binomial_cdf(n, p, k)
 
-        print("PMF Result:", pmf_result)  # Debug log
-        print("CDF Result:", cdf_result)  # Debug log
-
         distribution = [
             {
                 "k": i,
@@ -78,7 +75,6 @@ def calculate():
             }
         })
     except Exception as e:
-        print("Error:", e)  # Debug log
         return jsonify({"success": False, "error": str(e)}), 400
 
 if __name__ == '__main__':
