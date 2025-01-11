@@ -1,5 +1,5 @@
-let pmfChart; // Variabel global untuk menyimpan instance PMF chart
-let cdfChart; // Variabel global untuk menyimpan instance CDF chart
+let pmfChart;
+let cdfChart;
 
 document.getElementById('calculator-form').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -7,6 +7,11 @@ document.getElementById('calculator-form').addEventListener('submit', async (e) 
     const n = parseInt(document.getElementById('n').value);
     const p = parseFloat(document.getElementById('p').value);
     const k = parseInt(document.getElementById('k').value);
+
+    if (isNaN(n) || isNaN(p) || isNaN(k)) {
+        document.getElementById('result').innerHTML = `<p>Error: Pastikan semua input diisi dengan benar.</p>`;
+        return;
+    }
 
     try {
         const response = await fetch('/calculate', {
@@ -20,25 +25,22 @@ document.getElementById('calculator-form').addEventListener('submit', async (e) 
         if (data.success) {
             const { pmf, cdf, distribution } = data.data;
 
-            // Tampilkan langkah-langkah penyelesaian
+            const pmfSteps = pmf.steps || [];
+            const cdfSteps = cdf.steps || [];
+
             document.getElementById('result').innerHTML = `
                 <h3>Langkah-Langkah Penyelesaian:</h3>
                 <p><strong>PMF (P(X = k)):</strong></p>
-                <ul>${pmf.steps.map(step => `<li>${step}</li>`).join('')}</ul>
+                <ul>${pmfSteps.map(step => `<li>${step}</li>`).join('')}</ul>
                 <p><strong>CDF (P(X ≤ k)):</strong></p>
-                <ul>${cdf.steps.map(step => `<li>${step}</li>`).join('')}</ul>
+                <ul>${cdfSteps.map(step => `<li>${step}</li>`).join('')}</ul>
             `;
 
-            // Siapkan data untuk PMF dan CDF chart
             const labels = distribution.map((item) => item.k);
             const pmfData = distribution.map((item) => item.pmf);
             const cdfData = distribution.map((item) => item.cdf);
 
-            // Hancurkan grafik PMF sebelumnya jika ada
-            if (pmfChart) {
-                pmfChart.destroy();
-            }
-            // Render PMF chart
+            if (pmfChart) pmfChart.destroy();
             const pmfCtx = document.getElementById('pmf-chart').getContext('2d');
             pmfChart = new Chart(pmfCtx, {
                 type: 'bar',
@@ -61,11 +63,7 @@ document.getElementById('calculator-form').addEventListener('submit', async (e) 
                 }
             });
 
-            // Hancurkan grafik CDF sebelumnya jika ada
-            if (cdfChart) {
-                cdfChart.destroy();
-            }
-            // Render CDF chart
+            if (cdfChart) cdfChart.destroy();
             const cdfCtx = document.getElementById('cdf-chart').getContext('2d');
             cdfChart = new Chart(cdfCtx, {
                 type: 'line',
@@ -95,21 +93,12 @@ document.getElementById('calculator-form').addEventListener('submit', async (e) 
     }
 });
 
-// Tambahkan event listener untuk tombol reset
 document.getElementById('reset-button').addEventListener('click', () => {
-    // Reset nilai input
     document.getElementById('n').value = '';
     document.getElementById('p').value = '';
     document.getElementById('k').value = '';
-
-    // Hapus hasil
     document.getElementById('result').innerHTML = '';
 
-    // Hancurkan grafik jika ada
-    if (pmfChart) {
-        pmfChart.destroy();
-    }
-    if (cdfChart) {
-        cdfChart.destroy();
-    }
+    if (pmfChart) pmfChart.destroy();
+    if (cdfChart) cdfChart.destroy();
 });
