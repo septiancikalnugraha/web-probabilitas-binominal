@@ -8,9 +8,8 @@ document.getElementById('calculator-form').addEventListener('submit', async (e) 
     const p = parseFloat(document.getElementById('p').value);
     const k = parseInt(document.getElementById('k').value);
 
-    // Validasi input
-    if (isNaN(n) || isNaN(p) || isNaN(k) || n < 0 || p < 0 || p > 1 || k < 0 || k > n) {
-        document.getElementById('result').innerHTML = `<p>Error: Pastikan nilai input berada dalam rentang yang sesuai.</p>`;
+    if (isNaN(n) || isNaN(p) || isNaN(k)) {
+        document.getElementById('result').innerHTML = `<p>Error: Pastikan semua input diisi dengan benar.</p>`;
         return;
     }
 
@@ -26,8 +25,8 @@ document.getElementById('calculator-form').addEventListener('submit', async (e) 
         if (data.success) {
             const { pmf, cdf, distribution } = data.data;
 
-            const pmfSteps = pmf.steps || ['Langkah-langkah tidak tersedia.'];
-            const cdfSteps = cdf.steps || ['Langkah-langkah tidak tersedia.'];
+            const pmfSteps = pmf.steps || [];
+            const cdfSteps = cdf.steps || [];
 
             document.getElementById('result').innerHTML = `
                 <h3>Langkah-Langkah Penyelesaian:</h3>
@@ -103,3 +102,4 @@ document.getElementById('reset-button').addEventListener('click', () => {
     if (pmfChart) pmfChart.destroy();
     if (cdfChart) cdfChart.destroy();
 });
+
