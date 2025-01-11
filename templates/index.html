@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Probabilitas - Penjualan Pulsa & Kuota</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Kalkulator Probabilitas - Penjualan Pulsa & Kuota</h1>
+            <p>Hitung probabilitas keberhasilan dalam penjualan pulsa & kuota menggunakan distribusi binomial</p>
+        </div>
+
+        <form id="calculator-form" class="form">
+            <label for="n">Total Transaksi Penjualan (n):</label>
+            <input type="number" id="n" name="n" required>
+
+            <label for="p">Peluang Berhasil per Transaksi (p):</label>
+            <input type="number" id="p" name="p" step="0.01" required>
+
+            <label for="k">Jumlah Penjualan Sukses (k):</label>
+            <input type="number" id="k" name="k" required>
+
+            <button type="submit">Hitung Probabilitas</button>
+            <button type="button" id="reset-button">Reset</button>
+        </form>
+
+        <div id="result"></div>
+        <canvas id="pmf-chart" width="400" height="200"></canvas>
+        <canvas id="cdf-chart" width="400" height="200"></canvas>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
