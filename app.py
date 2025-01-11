@@ -50,13 +50,13 @@ def calculate():
         if not (0 <= k <= n):
             return jsonify({"success": False, "error": "k harus antara 0 dan n"}), 400
 
-        # Hitung PMF untuk k tertentu
+        # Hitung PMF dan CDF
         pmf_result = binomial_pmf(n, p, k)
-
-        # Hitung CDF hingga k tertentu
         cdf_result = binomial_cdf(n, p, k)
 
-        # Hitung distribusi PMF dan CDF untuk semua nilai k
+        print("PMF Result:", pmf_result)  # Debug log
+        print("CDF Result:", cdf_result)  # Debug log
+
         distribution = [
             {
                 "k": i,
@@ -78,6 +78,7 @@ def calculate():
             }
         })
     except Exception as e:
+        print("Error:", e)  # Debug log
         return jsonify({"success": False, "error": str(e)}), 400
 
 if __name__ == '__main__':
