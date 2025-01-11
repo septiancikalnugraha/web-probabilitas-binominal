@@ -1,11 +1,10 @@
 from flask import Flask, jsonify, render_template, request
 from math import comb
-import matplotlib
 
 app = Flask(__name__)
 
-# Fungsi untuk menghitung probabilitas binomial
-def binomial_probability(n, p, k):
+# Fungsi untuk menghitung PMF
+def binomial_pmf(n, p, k):
     kombinasi = comb(n, k)
     peluang_berhasil = p ** k
     peluang_gagal = (1 - p) ** (n - k)
@@ -17,18 +16,26 @@ def binomial_probability(n, p, k):
         "probabilitas": probabilitas,
         "steps": [
             f"Kombinasi (C(n, k)) = C({n}, {k}) = {kombinasi}",
-            f"Peluang Berhasil (p^k) = {p} ^ {k} = {peluang_berhasil:.6f}",
-            f"Peluang Gagal ((1-p)^(n-k)) = (1-{p}) ^ ({n}-{k}) = {peluang_gagal:.6f}",
-            f"Probabilitas Total = C(n, k) * p^k * (1-p)^(n-k) = {kombinasi} * {peluang_berhasil:.6f} * {peluang_gagal:.6f} = {probabilitas:.6f}"
+            f"Peluang Berhasil (p^k) = {p}^{k} = {peluang_berhasil:.6f}",
+            f"Peluang Gagal ((1-p)^(n-k)) = (1-{p})^{n-k} = {peluang_gagal:.6f}",
+            f"Probabilitas (PMF) = C(n, k) * p^k * (1-p)^(n-k) = {kombinasi} * {peluang_berhasil:.6f} * {peluang_gagal:.6f} = {probabilitas:.6f}"
         ]
     }
 
-# Rute untuk halaman utama
+# Fungsi untuk menghitung CDF
+def binomial_cdf(n, p, k):
+    cdf = 0
+    steps = []
+    for i in range(k + 1):
+        pmf = binomial_pmf(n, p, i)["probabilitas"]
+        cdf += pmf
+        steps.append(f"CDF hingga k={i}: {cdf:.6f}")
+    return {"cdf": cdf, "steps": steps}
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
-# Rute untuk menghitung probabilitas
 @app.route('/calculate', methods=['POST'])
 def calculate():
     try:
@@ -37,20 +44,24 @@ def calculate():
         p = float(data.get('p'))
         k = int(data.get('k'))
 
-        # Validasi
+        # Validasi input
         if not (0 <= p <= 1):
-            return jsonify({"success": False, "error": "Probability p must be between 0 and 1"}), 400
+            return jsonify({"success": False, "error": "Probabilitas (p) harus antara 0 dan 1"}), 400
         if not (0 <= k <= n):
-            return jsonify({"success": False, "error": "k must be between 0 and n"}), 400
+            return jsonify({"success": False, "error": "k harus antara 0 dan n"}), 400
 
-        # Hitung probabilitas spesifik
-        step_by_step = binomial_probability(n, p, k)
+        # Hitung PMF untuk k tertentu
+        pmf_result = binomial_pmf(n, p, k)
 
-        # Hitung distribusi probabilitas
+        # Hitung CDF hingga k tertentu
+        cdf_result = binomial_cdf(n, p, k)
+
+        # Hitung distribusi PMF dan CDF untuk semua nilai k
         distribution = [
             {
                 "k": i,
-                "probability": binomial_probability(n, p, i)["probabilitas"]
+                "pmf": binomial_pmf(n, p, i)["probabilitas"],
+                "cdf": binomial_cdf(n, p, i)["cdf"]
             }
             for i in range(n + 1)
         ]
@@ -61,7 +72,8 @@ def calculate():
                 "n": n,
                 "p": p,
                 "k": k,
-                "step_by_step": step_by_step,
+                "pmf": pmf_result,
+                "cdf": cdf_result,
                 "distribution": distribution
             }
         })
