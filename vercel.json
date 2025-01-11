@@ -4,24 +4,12 @@
     {
       "src": "app.py",
       "use": "@vercel/python"
-    },
-    {
-      "src": "templates/index.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "static/style.css",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "static/script.js",
-      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/templates/index.html"
+      "dest": "app.py"
     }
   ]
 }
