@@ -7,24 +7,21 @@
 body {
     font-family: 'Poppins', sans-serif;
     background-image: url('1.jpg');
-    background-size: cover;
-    background-attachment: fixed;
-    backdrop-filter: blur(5px); /* Efek blur pada latar belakang */
-    color: #333;
+    backdrop-filter: blur(4px); /* Efek blur pada latar belakang */
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     padding: 20px;
 }
 
 .container {
-    background: #ffffff; /* Warna putih solid */
+    background: #ffffff;
     border-radius: 12px;
     padding: 40px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 100%;
     max-width: 800px;
+    width: 100%;
 }
 
 .header {
@@ -55,16 +52,16 @@ label {
 
 input {
     padding: 12px;
-    border-radius: 8px;
     border: 1px solid #ddd;
+    border-radius: 8px;
     font-size: 16px;
-    background-color: #f7f7f7;
+    background: #f7f7f7;
 }
 
 button {
     padding: 12px;
     font-size: 16px;
-    background-color: #4a90e2;
+    background: #4a90e2;
     color: #fff;
     border: none;
     border-radius: 8px;
@@ -73,12 +70,12 @@ button {
 }
 
 button:hover {
-    background-color: #357ab7;
+    background: #357ab7;
 }
 
 canvas {
-    margin-top: 40px;
-    max-width: 100%;
+    margin-top: 30px;
     border-radius: 12px;
+    background: #f9f9f9;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
