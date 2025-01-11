@@ -8,8 +8,9 @@ document.getElementById('calculator-form').addEventListener('submit', async (e) 
     const p = parseFloat(document.getElementById('p').value);
     const k = parseInt(document.getElementById('k').value);
 
-    if (isNaN(n) || isNaN(p) || isNaN(k)) {
-        document.getElementById('result').innerHTML = `<p>Error: Pastikan semua input diisi dengan benar.</p>`;
+    // Validasi input
+    if (isNaN(n) || isNaN(p) || isNaN(k) || n < 0 || p < 0 || p > 1 || k < 0 || k > n) {
+        document.getElementById('result').innerHTML = `<p>Error: Pastikan nilai input berada dalam rentang yang sesuai.</p>`;
         return;
     }
 
@@ -25,9 +26,8 @@ document.getElementById('calculator-form').addEventListener('submit', async (e) 
         if (data.success) {
             const { pmf, cdf, distribution } = data.data;
 
-            // Memastikan pmf dan cdf memiliki langkah-langkah
-            const pmfSteps = Array.isArray(pmf.steps) ? pmf.steps : [];
-            const cdfSteps = Array.isArray(cdf.steps) ? cdf.steps : [];
+            const pmfSteps = pmf.steps || ['Langkah-langkah tidak tersedia.'];
+            const cdfSteps = cdf.steps || ['Langkah-langkah tidak tersedia.'];
 
             document.getElementById('result').innerHTML = `
                 <h3>Langkah-Langkah Penyelesaian:</h3>
@@ -41,7 +41,6 @@ document.getElementById('calculator-form').addEventListener('submit', async (e) 
             const pmfData = distribution.map((item) => item.pmf);
             const cdfData = distribution.map((item) => item.cdf);
 
-            // Membuat chart PMF jika chart sebelumnya ada
             if (pmfChart) pmfChart.destroy();
             const pmfCtx = document.getElementById('pmf-chart').getContext('2d');
             pmfChart = new Chart(pmfCtx, {
@@ -65,7 +64,6 @@ document.getElementById('calculator-form').addEventListener('submit', async (e) 
                 }
             });
 
-            // Membuat chart CDF jika chart sebelumnya ada
             if (cdfChart) cdfChart.destroy();
             const cdfCtx = document.getElementById('cdf-chart').getContext('2d');
             cdfChart = new Chart(cdfCtx, {
@@ -102,7 +100,6 @@ document.getElementById('reset-button').addEventListener('click', () => {
     document.getElementById('k').value = '';
     document.getElementById('result').innerHTML = '';
 
-    // Menghancurkan chart jika ada
     if (pmfChart) pmfChart.destroy();
     if (cdfChart) cdfChart.destroy();
 });
