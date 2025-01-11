@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, render_template, request
 from math import comb
+import matplotlib
 
 app = Flask(__name__)
 
