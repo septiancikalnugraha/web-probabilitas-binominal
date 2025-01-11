@@ -12,7 +12,7 @@
     <div class="container">
         <div class="header">
             <h1>Kalkulator Probabilitas - Penjualan Pulsa & Kuota</h1>
-            <p>Hitung probabilitas keberhasilan dalam penjualan pulsa & kuota dengan distribusi binomial</p>
+            <p>Hitung probabilitas keberhasilan dalam penjualan pulsa & kuota menggunakan distribusi binomial</p>
         </div>
 
         <form id="calculator-form" class="form">
@@ -26,10 +26,12 @@
             <input type="number" id="k" name="k" required>
 
             <button type="submit">Hitung Probabilitas</button>
+            <button type="button" id="reset-button">Reset</button>
         </form>
 
         <div id="result"></div>
-        <canvas id="probability-chart" width="400" height="200"></canvas>
+        <canvas id="pmf-chart" width="400" height="200"></canvas>
+        <canvas id="cdf-chart" width="400" height="200"></canvas>
     </div>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
